@@ -1,0 +1,331 @@
+
+syntax="proto3";
+package apiservice;
+option go_package = "./pb";
+// import "const.proto";
+
+import "google/api/annotations.proto";
+
+// import "google/api/field_behavior.proto";
+// import "google/api/http.proto";
+// import "google/api/httpbody.proto";
+// import "protoc-gen-swagger/options/annotations.proto";
+
+service ApiService {
+    rpc HandleRegisterPost(RegisterPostRequest) returns (RegisterPostResponse) {
+        option (google.api.http) = {
+            post: "/register"
+            body: "*"
+        };
+    }
+    rpc HandleLoginPost(LoginPostRequest) returns (LoginPostResponse) {
+        option (google.api.http) = {
+            post: "/login"
+            body: "*"
+        };
+    }
+    rpc UserHandleChangePasswordPut(ChangePasswordPutRequest) returns (ChangePasswordPutResponse) {
+        option (google.api.http) = {
+            put: "/user/change-password"
+            body: "*"
+        };
+    }
+    rpc HandleSearchStudentGet(SearchStudentGetRequest) returns (SearchStudentGetResponse) {
+        option (google.api.http) = {
+            get: "/student/{query=message}"
+        };
+    }
+    rpc HandleListStudentGet(SearchStudentGetRequest) returns (SearchStudentGetResponse) {
+        option (google.api.http) = {
+            get: "/student"
+        };
+    }
+    rpc HandleSearchClassGet(SearchClassGetRequest) returns (SearchClassGetResponse) {
+        option (google.api.http) = {
+            get: "/class/{query=message}"
+        };
+    }
+    rpc HandleListClassGet(SearchClassGetRequest) returns (SearchClassGetResponse) {
+        option (google.api.http) = {
+            get: "/class"
+        };
+    }
+    rpc HandleListStudentGetByClass(ListStudentGetByClassRequest) returns (ListStudentGetByClassResponse) {
+        option (google.api.http) = {
+            get: "/class/student/{query=message}"
+        };
+    }
+    rpc HandleCreateStudentPost(CreateStudentPostRequest) returns (CreateStudentPostResponse) {
+        option (google.api.http) = {
+            post: "/admin/student/create"
+            body: "*"
+        };
+    } 
+    rpc HandleCreateClassPost(CreateClassPostRequest) returns (CreateClassPostResponse) {
+        option (google.api.http) = {
+            post: "/admin/class/create"
+            body: "*"
+        };
+    } 
+    rpc HandleUpdateStudentPut(UpdateStudentPutRequest) returns (UpdateStudentPutResponse) {
+        option (google.api.http) = {
+            put: "/admin/student/update"
+            body: "*"
+        };
+    }
+    rpc HandleUpdateClassPut(UpdateClassPutRequest) returns (UpdateClassPutResponse) {
+        option (google.api.http) = {
+            put: "/admin/class/update"
+            body: "*"
+        };
+    }
+    rpc HandleStudentDelete(StudentDeleteRequest) returns (StudentDeleteResponse) {
+        option (google.api.http) = {
+            post: "/admin/student/delete",
+            body: "*"
+        };
+    }
+    rpc HandleClassDelete(ClassDeleteRequest) returns (ClassDeleteResponse) {
+        option (google.api.http) = {
+            post: "/admin/class/delete",
+            body: "*"
+        };
+    }
+}
+
+message Pagination {
+    int32 offset = 1;
+    int32 limit = 2;
+    int64 total = 3;
+}
+
+message Student {
+    string id = 1;
+    string fullName  = 2;
+	string dateOfBirth = 3;
+	string studentCode = 4;
+	string intake = 5;
+	string gender = 6;
+	string placeOfBirth = 7;
+    string program = 8;
+    string major = 9;
+    string degree = 10;
+    string classId = 11;
+    string className = 12;
+    double gpa = 13;
+}
+
+message SearchStudentGetRequest {
+    string limit = 1;
+    string offset = 2;
+    string query = 3;
+    
+}
+
+message SearchStudentGetResponse {
+    int32 code = 1;
+    bool success = 2;
+    Data data = 3;
+    message Data {
+        repeated Student result = 1;
+        Pagination pagination = 2;
+
+    }
+}
+
+
+message RegisterPostRequest {
+    string username = 1;
+    string password = 2;
+    int32 role = 3;
+    string name = 4;
+}
+
+message RegisterPostResponse {
+    int32 code = 1;
+    bool success = 2;
+    Data data = 3;
+    message Data {
+        string username = 1;
+        string Name = 2;
+    }
+}
+
+message LoginPostRequest {
+    string username = 1;
+    string password = 2;
+}
+
+message LoginPostResponse {
+    int32 code = 1;
+    bool success = 2;
+    Data data = 3;
+    message Data {
+        string token = 1;
+    }
+}
+
+message ChangePasswordPutRequest {
+    string oldPassword = 1;
+    string newPassword = 2;
+}
+
+message ChangePasswordPutResponse {
+    int32 code = 1;
+    bool success = 2;
+    Data data = 3;
+    message Data {}
+}
+
+message User{
+    string id = 1;
+    string username = 2;
+	string password = 3;
+	int32  role = 4;
+	string name = 5;
+}
+
+message Class{
+    string id = 1;
+    string name = 2;
+    string duration = 3;
+}
+
+
+message SearchClassGetRequest {
+    string limit = 1;
+    string offset = 2;
+    string query = 3;
+    
+}
+
+message SearchClassGetResponse {
+    int32 code = 1;
+    bool success = 2;
+    Data data = 3;
+    message Data {
+        repeated Class result = 1;
+        Pagination pagination = 2;
+
+    }
+}
+
+message CreateStudentPostRequest{
+    string fullName  = 1;
+	string dateOfBirth = 2;
+	string studentCode = 3;
+	string intake = 4;
+	string gender = 5;
+	string placeOfBirth = 6;
+    string program = 7;
+    string major = 8;
+    string degree = 9;
+    string classId = 10;
+    double gpa = 11;
+}
+
+message CreateStudentPostResponse{
+    int32 code = 1;
+    bool success = 2;
+    Data data = 3;
+    message Data {
+
+    }
+}
+
+
+message UpdateStudentPutRequest{
+    string fullName  = 1;
+	string dateOfBirth = 2;
+	string studentCode = 3;
+	string intake = 4;
+	string gender = 5;
+	string placeOfBirth = 6;
+    string program = 7;
+    string major = 8;
+    string degree = 9;
+    string classId = 10;
+    double gpa = 11;
+}
+
+message UpdateStudentPutResponse{
+    int32 code = 1;
+    bool success = 2;
+    Data data = 3;
+    message Data {
+
+    }
+}
+
+
+message StudentDeleteRequest{
+	string query = 1;
+}
+
+message StudentDeleteResponse{
+    int32 code = 1;
+    bool success = 2;
+    Data data = 3;
+    message Data {
+
+    }
+}
+
+message ListStudentGetByClassRequest{
+    string limit = 1;
+    string offset = 2;
+    string query = 3;
+}
+
+message ListStudentGetByClassResponse {
+    int32 code = 1;
+    bool success = 2;
+    Data data = 3;
+    message Data {
+        repeated Student result = 1;
+        Pagination pagination = 2;
+
+    }
+}
+
+message CreateClassPostRequest{
+    string name = 1;
+    string duration = 2;
+}
+
+message CreateClassPostResponse{
+    int32 code = 1;
+    bool success = 2;
+    Data data = 3;
+    message Data {
+
+    }
+}
+
+message UpdateClassPutRequest{
+    string name = 1;
+    string duration = 2;
+}
+
+
+message UpdateClassPutResponse{
+    int32 code = 1;
+    bool success = 2;
+    Data data = 3;
+    message Data {
+
+    }
+}
+
+message ClassDeleteRequest{
+    string query = 1;
+}
+
+message ClassDeleteResponse{
+    int32 code = 1;
+    bool success = 2;
+    Data data = 3;
+    message Data {
+
+    }
+}

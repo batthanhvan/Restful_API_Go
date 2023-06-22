@@ -1,0 +1,9 @@
+syntax = "proto3";
+
+package const;
+option go_package = "./pb";
+
+enum ROLE {
+    CUSTOMER = 0;
+    ADMIN = 1;
+}
